@@ -1,0 +1,102 @@
+import React from 'react';
+import { ShoppingBag, Search, Phone } from 'lucide-react';
+
+const Header = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <header className="bg-primary text-primary-foreground shadow-elegant sticky top-0 z-50">
+      {/* Top Bar */}
+      <div className="bg-gold text-ts-black py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-4">
+            <span>🇰🇪 Free Delivery in Nairobi County | Express Delivery Available</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Phone className="w-4 h-4" />
+              <span>+254 712 345 678</span>
+            </div>
+            <span>|</span>
+            <span>Customer Service 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <div className="bg-gold w-10 h-10 rounded-full flex items-center justify-center">
+              <span className="text-ts-black font-bold text-xl">TS</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold font-poppins">Timeless Strands</h1>
+              <p className="text-xs opacity-90">Premium Wigs Kenya</p>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="hidden md:flex flex-1 max-w-md mx-8">
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Search for wigs, colors, sizes..."
+                className="w-full pl-4 pr-12 py-2 rounded-full border-2 border-gold focus:border-gold-light text-ts-black"
+              />
+              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gold hover:bg-gold-dark rounded-full p-1.5 transition-colors">
+                <Search className="w-4 h-4 text-ts-black" />
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex items-center space-x-6">
+            <button 
+              onClick={() => scrollToSection('products')}
+              className="hover:text-gold transition-colors"
+            >
+              Wigs
+            </button>
+            <button 
+              onClick={() => scrollToSection('checkout')}
+              className="hover:text-gold transition-colors"
+            >
+              Checkout
+            </button>
+            <button 
+              onClick={() => scrollToSection('track-order')}
+              className="hover:text-gold transition-colors"
+            >
+              Track Order
+            </button>
+            <button className="bg-gold hover:bg-gold-dark text-ts-black px-4 py-2 rounded-full font-semibold transition-all transform hover:scale-105 flex items-center space-x-1">
+              <ShoppingBag className="w-4 h-4" />
+              <span>Cart (0)</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* Mobile Search */}
+        <div className="md:hidden mt-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search for wigs..."
+              className="w-full pl-4 pr-12 py-2 rounded-full border-2 border-gold focus:border-gold-light text-ts-black"
+            />
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gold hover:bg-gold-dark rounded-full p-1.5 transition-colors">
+              <Search className="w-4 h-4 text-ts-black" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
