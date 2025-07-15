@@ -34,9 +34,14 @@ const Footer = () => {
               <a href="#" className="bg-gold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gold-dark transition-colors">
                 <Instagram className="w-5 h-5 text-ts-black" />
               </a>
-              <a href="https://wa.me/254712345678" className="bg-green-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors">
-                <MessageCircle className="w-5 h-5 text-white" />
-              </a>
+               <a 
+                 href="https://wa.me/254768174878?text=Hi! I'm interested in your wigs." 
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="bg-green-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+               >
+                 <MessageCircle className="w-5 h-5 text-white" />
+               </a>
             </div>
           </div>
 
@@ -119,12 +124,12 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-gold mt-0.5" />
                 <div>
                   <p className="text-gray-300 text-sm font-semibold">Phone & WhatsApp</p>
-                  <a 
-                    href="tel:+254712345678" 
-                    className="text-gray-400 text-sm hover:text-gold transition-colors"
-                  >
-                    +254 712 345 678
-                  </a>
+                   <a 
+                     href="tel:+254768174878" 
+                     className="text-gray-400 text-sm hover:text-gold transition-colors"
+                   >
+                     +254 768 174 878
+                   </a>
                 </div>
               </div>
 
@@ -132,12 +137,12 @@ const Footer = () => {
                 <Mail className="w-5 h-5 text-gold mt-0.5" />
                 <div>
                   <p className="text-gray-300 text-sm font-semibold">Email</p>
-                  <a 
-                    href="mailto:support@timelessstrands.co.ke" 
-                    className="text-gray-400 text-sm hover:text-gold transition-colors"
-                  >
-                    support@timelessstrands.co.ke
-                  </a>
+                   <a 
+                     href="mailto:estherzolabird@gmail.com" 
+                     className="text-gray-400 text-sm hover:text-gold transition-colors"
+                   >
+                     estherzolabird@gmail.com
+                   </a>
                 </div>
               </div>
 

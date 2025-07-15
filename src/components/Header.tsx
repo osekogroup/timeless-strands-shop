@@ -1,10 +1,36 @@
 import React from 'react';
-import { ShoppingBag, Search, Phone } from 'lucide-react';
+import { ShoppingBag, Search, Phone, User, LogOut } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
-const Header = () => {
+interface HeaderProps {
+  user: any;
+  cartItems: any[];
+  onAuthClick: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
+  const { toast } = useToast();
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out.",
+      });
+    }
   };
 
   return (
@@ -18,7 +44,7 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
               <Phone className="w-4 h-4" />
-              <span>+254 712 345 678</span>
+              <span>+254 768 174 878</span>
             </div>
             <span>|</span>
             <span>Customer Service 24/7</span>
@@ -74,10 +100,35 @@ const Header = () => {
             >
               Track Order
             </button>
-            <button className="bg-gold hover:bg-gold-dark text-ts-black px-4 py-2 rounded-full font-semibold transition-all transform hover:scale-105 flex items-center space-x-1">
+            <button 
+              onClick={() => scrollToSection('checkout')}
+              className="bg-gold hover:bg-gold-dark text-ts-black px-4 py-2 rounded-full font-semibold transition-all transform hover:scale-105 flex items-center space-x-1"
+            >
               <ShoppingBag className="w-4 h-4" />
-              <span>Cart (0)</span>
+              <span>Cart ({cartItems.length})</span>
             </button>
+            
+            {/* Auth Button */}
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <span className="text-sm">Hi, {user.user_metadata?.display_name || user.email}</span>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center space-x-1 text-gold hover:text-gold-dark transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onAuthClick}
+                className="flex items-center space-x-1 bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-ts-black px-4 py-2 rounded-full font-semibold transition-all"
+              >
+                <User className="w-4 h-4" />
+                <span>Sign In</span>
+              </button>
+            )}
           </nav>
         </div>
 

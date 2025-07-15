@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
+import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
 
 interface ProductVariant {
   laceSize: string;
@@ -71,55 +71,90 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-card rounded-2xl shadow-elegant hover:shadow-gold transition-all duration-300 overflow-hidden group">
+    <div className="bg-card rounded-2xl shadow-elegant hover:shadow-gold transition-all duration-300 overflow-hidden group border border-border">
       {/* Image Section */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-gray-50">
         <img
           src={images[currentImageIndex]}
           alt={name}
           className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         
-        {/* Image Navigation Dots */}
+        {/* Image Navigation */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentImageIndex ? 'bg-gold' : 'bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
+          <>
+            {/* Navigation Arrows */}
+            <button
+              onClick={() => setCurrentImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1)}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1)}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            
+            {/* Navigation Dots */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === currentImageIndex ? 'bg-gold' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
         )}
 
-        {/* Wishlist Button */}
-        <button
-          onClick={() => setIsWishlisted(!isWishlisted)}
-          className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full transition-colors"
-        >
-          <Heart className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-current' : 'text-gray-600'}`} />
-        </button>
+        {/* Top Action Buttons */}
+        <div className="absolute top-4 right-4 flex flex-col space-y-2">
+          <button
+            onClick={() => setIsWishlisted(!isWishlisted)}
+            className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md"
+          >
+            <Heart className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-current' : 'text-gray-600'}`} />
+          </button>
+          <button className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md">
+            <Share2 className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
 
-        {/* Stock Badge */}
-        {currentStock === 0 && (
-          <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Out of Stock
-          </div>
-        )}
+        {/* Status Badges */}
+        <div className="absolute top-4 left-4 flex flex-col space-y-2">
+          {currentStock === 0 && (
+            <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              Out of Stock
+            </div>
+          )}
+          {originalPrice && currentPrice < originalPrice && (
+            <div className="bg-gold text-ts-black px-3 py-1 rounded-full text-sm font-semibold">
+              -{Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}%
+            </div>
+          )}
+          {currentStock > 0 && currentStock <= 3 && (
+            <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              Only {currentStock} left
+            </div>
+          )}
+        </div>
 
-        {/* Discount Badge */}
-        {originalPrice && (
-          <div className="absolute top-4 left-4 bg-gold text-ts-black px-3 py-1 rounded-full text-sm font-semibold">
-            Save Ksh {originalPrice - currentPrice}
-          </div>
-        )}
+        {/* Quick View on Hover */}
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <button className="bg-white text-ts-black px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform">
+            <Eye className="w-4 h-4" />
+            <span>Quick View</span>
+          </button>
+        </div>
       </div>
 
       {/* Content Section */}
-      <div className="p-6 space-y-4">
+      <div className="p-4 space-y-3">
         {/* Rating and Reviews */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-1">
@@ -127,21 +162,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${
+                  className={`w-3.5 h-3.5 ${
                     i < Math.floor(rating) ? 'text-gold fill-current' : 'text-gray-300'
                   }`}
                 />
               ))}
             </div>
-            <span className="text-sm text-muted-foreground">({reviews})</span>
+            <span className="text-xs text-muted-foreground">({reviews})</span>
           </div>
-          <button className="text-muted-foreground hover:text-gold transition-colors">
-            <Eye className="w-5 h-5" />
-          </button>
+          <span className="text-xs text-green-600 font-semibold">Free Shipping</span>
         </div>
 
         {/* Product Name */}
-        <h3 className="text-lg font-bold text-card-foreground font-poppins line-clamp-2">
+        <h3 className="text-base font-bold text-card-foreground font-poppins line-clamp-2 hover:text-gold cursor-pointer transition-colors">
           {name}
         </h3>
 
@@ -203,20 +236,26 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         {/* Price */}
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-gold">
-                Ksh {currentPrice.toLocaleString()}
-              </span>
-              {originalPrice && (
-                <span className="text-lg text-muted-foreground line-through">
-                  Ksh {originalPrice.toLocaleString()}
+        <div className="border-t pt-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg font-bold text-gold">
+                  Ksh {currentPrice.toLocaleString()}
                 </span>
-              )}
+                {originalPrice && originalPrice > currentPrice && (
+                  <span className="text-sm text-muted-foreground line-through">
+                    Ksh {originalPrice.toLocaleString()}
+                  </span>
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                + delivery fee
+              </div>
             </div>
-            <div className="text-xs text-muted-foreground">
-              + delivery fee
+            <div className="text-right">
+              <div className="text-xs text-green-600">Free Returns</div>
+              <div className="text-xs text-muted-foreground">7-14 days</div>
             </div>
           </div>
         </div>
@@ -225,10 +264,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <button
           onClick={handleAddToCart}
           disabled={!selectedLaceSize || !selectedInchSize || currentStock === 0}
-          className="w-full bg-gold hover:bg-gold-dark disabled:bg-gray-medium disabled:cursor-not-allowed text-ts-black font-bold py-3 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2"
+          className="w-full bg-gold hover:bg-gold-dark disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 text-ts-black font-bold py-2.5 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2 shadow-md"
         >
-          <ShoppingCart className="w-5 h-5" />
-          <span>Add to Order</span>
+          <ShoppingCart className="w-4 h-4" />
+          <span>{currentStock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
         </button>
       </div>
     </div>
