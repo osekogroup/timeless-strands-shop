@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
+import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2, Play, Video } from 'lucide-react';
 
 interface ProductVariant {
   laceSize: string;
@@ -17,6 +17,8 @@ interface ProductCardProps {
   rating: number;
   reviews: number;
   originalPrice?: number;
+  hasVideo?: boolean;
+  videoLength?: string;
   onAddToCart: (product: any) => void;
 }
 
@@ -29,6 +31,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   rating,
   reviews,
   originalPrice,
+  hasVideo = false,
+  videoLength,
   onAddToCart
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -71,14 +75,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-card rounded-2xl shadow-elegant hover:shadow-gold transition-all duration-300 overflow-hidden group border border-border">
+    <div className="bg-card rounded-xl sm:rounded-2xl shadow-elegant hover:shadow-gold transition-all duration-300 overflow-hidden group border border-border w-full max-w-sm mx-auto">
       {/* Image Section */}
       <div className="relative overflow-hidden bg-gray-50">
         <img
           src={images[currentImageIndex]}
           alt={name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-48 sm:h-56 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
         />
+        
+        {/* Video Indicator */}
+        {hasVideo && (
+          <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-lg flex items-center space-x-1 text-xs">
+            <Video className="w-3 h-3" />
+            <span>Video</span>
+            {videoLength && <span>• {videoLength}</span>}
+          </div>
+        )}
         
         {/* Image Navigation */}
         {images.length > 1 && (
@@ -126,35 +139,43 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Status Badges */}
-        <div className="absolute top-4 left-4 flex flex-col space-y-2">
+        <div className={`absolute ${hasVideo ? 'top-12' : 'top-4'} left-4 flex flex-col space-y-2`}>
           {currentStock === 0 && (
-            <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            <div className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
               Out of Stock
             </div>
           )}
           {originalPrice && currentPrice < originalPrice && (
-            <div className="bg-gold text-ts-black px-3 py-1 rounded-full text-sm font-semibold">
+            <div className="bg-gold text-ts-black px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
               -{Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}%
             </div>
           )}
           {currentStock > 0 && currentStock <= 3 && (
-            <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            <div className="bg-orange-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
               Only {currentStock} left
             </div>
           )}
         </div>
 
-        {/* Quick View on Hover */}
+        {/* Quick View/Play Video on Hover */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <button className="bg-white text-ts-black px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform">
-            <Eye className="w-4 h-4" />
-            <span>Quick View</span>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button className="bg-white text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm">
+              <Eye className="w-4 h-4" />
+              <span className="hidden sm:inline">Quick View</span>
+            </button>
+            {hasVideo && (
+              <button className="bg-gold text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm">
+                <Play className="w-4 h-4" />
+                <span className="hidden sm:inline">Play Video</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 sm:p-4 space-y-3">
         {/* Rating and Reviews */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-1">
@@ -174,12 +195,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Product Name */}
-        <h3 className="text-base font-bold text-card-foreground font-poppins line-clamp-2 hover:text-gold cursor-pointer transition-colors">
+        <h3 className="text-sm sm:text-base font-bold text-card-foreground font-poppins line-clamp-2 hover:text-gold cursor-pointer transition-colors leading-tight">
           {name}
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-muted-foreground line-clamp-2">
+        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
           {description}
         </p>
 
@@ -187,13 +208,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="space-y-3">
           {/* Lace Size */}
           <div>
-            <label className="block text-sm font-semibold text-card-foreground mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-card-foreground mb-1 sm:mb-2">
               Lace Size:
             </label>
             <select
               value={selectedLaceSize}
               onChange={(e) => setSelectedLaceSize(e.target.value)}
-              className="w-full p-2 border border-border rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20"
+              className="w-full p-2 border border-border rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20 text-xs sm:text-sm"
             >
               <option value="">Select Lace Size</option>
               {laceSizes.map(size => (
@@ -204,13 +225,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Inch Size */}
           <div>
-            <label className="block text-sm font-semibold text-card-foreground mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-card-foreground mb-1 sm:mb-2">
               Length:
             </label>
             <select
               value={selectedInchSize}
               onChange={(e) => setSelectedInchSize(e.target.value)}
-              className="w-full p-2 border border-border rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20"
+              className="w-full p-2 border border-border rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20 text-xs sm:text-sm"
             >
               <option value="">Select Length</option>
               {inchSizes.map(size => (
@@ -264,10 +285,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <button
           onClick={handleAddToCart}
           disabled={!selectedLaceSize || !selectedInchSize || currentStock === 0}
-          className="w-full bg-gold hover:bg-gold-dark disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 text-ts-black font-bold py-2.5 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2 shadow-md"
+          className="w-full bg-gold hover:bg-gold-dark disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 text-ts-black font-bold py-2 sm:py-2.5 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2 shadow-md text-sm sm:text-base"
         >
           <ShoppingCart className="w-4 h-4" />
-          <span>{currentStock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
+          <span className="truncate">{currentStock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
         </button>
       </div>
     </div>
