@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2, Play, Video } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductVariant {
   laceSize: string;
@@ -35,6 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   videoLength,
   onAddToCart
 }) => {
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedLaceSize, setSelectedLaceSize] = useState('');
   const [selectedInchSize, setSelectedInchSize] = useState('');
@@ -160,14 +162,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* Quick View/Play Video on Hover */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
           <div className="flex flex-col sm:flex-row gap-2">
-            <button className="bg-white text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm">
+            <button 
+              onClick={() => navigate(`/product/${id}`)}
+              className="bg-white text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm"
+            >
               <Eye className="w-4 h-4" />
-              <span className="hidden sm:inline">Quick View</span>
+              <span className="hidden sm:inline">View Details</span>
             </button>
             {hasVideo && (
-              <button className="bg-gold text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm">
+              <button 
+                onClick={() => navigate(`/product/${id}`)}
+                className="bg-gold text-ts-black px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center space-x-2 transform scale-90 group-hover:scale-100 transition-transform text-sm"
+              >
                 <Play className="w-4 h-4" />
-                <span className="hidden sm:inline">Play Video</span>
+                <span className="hidden sm:inline">Watch Video</span>
               </button>
             )}
           </div>
@@ -195,7 +203,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Product Name */}
-        <h3 className="text-sm sm:text-base font-bold text-card-foreground font-poppins line-clamp-2 hover:text-gold cursor-pointer transition-colors leading-tight">
+        <h3 
+          onClick={() => navigate(`/product/${id}`)}
+          className="text-sm sm:text-base font-bold text-card-foreground font-poppins line-clamp-2 hover:text-gold cursor-pointer transition-colors leading-tight"
+        >
           {name}
         </h3>
 
