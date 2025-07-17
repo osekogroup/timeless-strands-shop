@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import { Filter, SlidersHorizontal, Grid3X3, LayoutGrid } from 'lucide-react';
 
-// Import new wig images
+// Import existing wig images
 import curlyHumanHairWig from '@/assets/curly-human-hair-wig.jpg';
 import blondeBobWig from '@/assets/blonde-bob-wig.jpg';
 import burgundyStraightWig from '@/assets/burgundy-straight-wig.jpg';
@@ -15,6 +15,15 @@ import kinkyCurlyRedHighlightWig from '@/assets/kinky-curly-red-highlight-wig.jp
 import gluelessStraightLongWig from '@/assets/glueless-straight-long-wig.jpg';
 import honeyBlondeAfroWig from '@/assets/honey-blonde-afro-wig.jpg';
 import redBouncyCurlsWig from '@/assets/red-bouncy-curls-wig.jpg';
+
+// Import new wig images
+import pixieShortCutBlackWig from '@/assets/pixie-short-cut-black-wig.jpg';
+import pixie4006Wig from '@/assets/4006-pixie-short-cut-wig.jpg';
+import braidedPixieWig from '@/assets/braided-pixie-short-cut-wig.jpg';
+import pixie2026Wig from '@/assets/2026-7018-pixie-wig.jpg';
+import curlyT4350Wig from '@/assets/curly-t4-350-4-wig.jpg';
+import fringeBobWig from '@/assets/fringe-bob-wig.jpg';
+import gradeABobWig from '@/assets/12a-grade-bob-wig.jpg';
 
 interface CartItem {
   id: number;
@@ -36,7 +45,7 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // NEW WIG COLLECTION - 13 Premium Products
+  // COMPLETE WIG COLLECTION - All Products
   const products = [
     {
       id: 1,
@@ -226,6 +235,130 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
       category: "frontal",
       hasVideo: true,
       videoLength: "18 inches"
+    },
+    // NEW ADDITIONAL PRODUCTS
+    {
+      id: 13,
+      name: "9302 Pixie Short Cut Human Hair",
+      description: "Edgy pixie cut with natural black (1B) color. Modern and sophisticated short style.",
+      images: [pixieShortCutBlackWig, pixieShortCutBlackWig, pixieShortCutBlackWig],
+      variants: [
+        { laceSize: "No Lace", inchSize: "6 inches", price: 4540, stock: 8 },
+        { laceSize: "No Lace", inchSize: "6 inches (Other Colors)", price: 4747, stock: 6 },
+      ],
+      rating: 4.7,
+      reviews: 145,
+      category: "pixie",
+      hasVideo: false
+    },
+    {
+      id: 14,
+      name: "4006 Pixie Short Cut Human Hair Wig",
+      description: "Sleek pixie cut with versatile styling options. Available in multiple colors.",
+      images: [pixie4006Wig, pixie4006Wig, pixie4006Wig],
+      variants: [
+        { laceSize: "No Lace", inchSize: "6 inches", price: 5032, stock: 7 },
+        { laceSize: "No Lace", inchSize: "6 inches (Other Colors)", price: 5226, stock: 5 },
+      ],
+      rating: 4.8,
+      reviews: 132,
+      category: "pixie",
+      hasVideo: false
+    },
+    {
+      id: 15,
+      name: "4006+ Braided Pixie Short Cut - 13x4 Lace",
+      description: "Unique braided pixie design with 13x4 lace. Available in burgundy, black, ginger, blonde highlights, and brown.",
+      images: [braidedPixieWig, braidedPixieWig, braidedPixieWig],
+      variants: [
+        { laceSize: "13x4 Lace", inchSize: "6 inches", price: 5020, stock: 6 },
+        { laceSize: "13x4 Lace", inchSize: "6 inches (Other Colors)", price: 5215, stock: 4 },
+      ],
+      rating: 4.9,
+      reviews: 98,
+      category: "pixie",
+      hasVideo: false
+    },
+    {
+      id: 16,
+      name: "2026 & 7018 Pixie Short Cut Wig",
+      description: "Classic pixie cut design with natural texture. Perfect for daily wear.",
+      images: [pixie2026Wig, pixie2026Wig, pixie2026Wig],
+      variants: [
+        { laceSize: "No Lace", inchSize: "6 inches", price: 4345, stock: 9 },
+        { laceSize: "No Lace", inchSize: "6 inches (Other Colors)", price: 4540, stock: 7 },
+      ],
+      rating: 4.6,
+      reviews: 156,
+      category: "pixie",
+      hasVideo: false
+    },
+    {
+      id: 17,
+      name: "Curly Human Hair - Color T4-350-4",
+      description: "Beautiful curly texture with stunning T4-350-4 color blend. 13x4 lace with 180% density.",
+      images: [curlyT4350Wig, curlyT4350Wig, curlyT4350Wig],
+      variants: [
+        { laceSize: "13x4 Lace", inchSize: "12 inches", price: 7315, stock: 5 },
+        { laceSize: "13x4 Lace", inchSize: "14 inches", price: 8009, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "16 inches", price: 8505, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "18 inches", price: 9297, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "20 inches", price: 11289, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "22 inches", price: 13373, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "24 inches", price: 15138, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "26 inches", price: 17222, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "28 inches", price: 19999, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "30 inches", price: 23999, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "32 inches", price: 26999, stock: 1 },
+      ],
+      rating: 4.9,
+      reviews: 234,
+      category: "curly",
+      hasVideo: true,
+      videoLength: "Various lengths"
+    },
+    {
+      id: 18,
+      name: "Fringe Bob Human Hair Wig - No Lace",
+      description: "Stylish bob with bangs. No lace construction with 180% density. Natural and other colors available.",
+      images: [fringeBobWig, fringeBobWig, fringeBobWig],
+      variants: [
+        { laceSize: "No Lace", inchSize: "10 inches", price: 4338, stock: 8 },
+        { laceSize: "No Lace", inchSize: "10 inches (Other Colors)", price: 4932, stock: 6 },
+      ],
+      rating: 4.7,
+      reviews: 187,
+      category: "bob",
+      hasVideo: false
+    },
+    {
+      id: 19,
+      name: "Bob Human Hair Wig - 12A Grade, 13x4 Lace",
+      description: "Premium 12A grade bob wig with 13x4 lace. Available in natural and other colors. For 4x4 lace, deduct Ksh 300 from each size.",
+      images: [gradeABobWig, gradeABobWig, gradeABobWig],
+      variants: [
+        { laceSize: "13x4 Lace", inchSize: "10 inches (Natural)", price: 5726, stock: 6 },
+        { laceSize: "13x4 Lace", inchSize: "12 inches (Natural)", price: 6400, stock: 5 },
+        { laceSize: "13x4 Lace", inchSize: "14 inches (Natural)", price: 7391, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "16 inches (Natural)", price: 9989, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "10 inches (Other Colors)", price: 6320, stock: 5 },
+        { laceSize: "13x4 Lace", inchSize: "12 inches (Other Colors)", price: 6995, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "14 inches (Other Colors)", price: 7986, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "16 inches (Other Colors)", price: 10583, stock: 2 },
+        { laceSize: "4x4 Lace", inchSize: "10 inches (Natural)", price: 5426, stock: 4 },
+        { laceSize: "4x4 Lace", inchSize: "12 inches (Natural)", price: 6100, stock: 3 },
+        { laceSize: "4x4 Lace", inchSize: "14 inches (Natural)", price: 7091, stock: 2 },
+        { laceSize: "4x4 Lace", inchSize: "16 inches (Natural)", price: 9689, stock: 2 },
+        { laceSize: "4x4 Lace", inchSize: "10 inches (Other Colors)", price: 6020, stock: 3 },
+        { laceSize: "4x4 Lace", inchSize: "12 inches (Other Colors)", price: 6695, stock: 2 },
+        { laceSize: "4x4 Lace", inchSize: "14 inches (Other Colors)", price: 7686, stock: 2 },
+        { laceSize: "4x4 Lace", inchSize: "16 inches (Other Colors)", price: 10283, stock: 1 },
+      ],
+      rating: 4.8,
+      reviews: 198,
+      category: "bob",
+      hasVideo: true,
+      videoLength: "Multiple lengths"
     }
   ];
 
@@ -295,7 +428,10 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
                 { key: 'all', label: 'All Wigs' },
                 { key: 'closure', label: 'Closure' },
                 { key: 'frontal', label: 'Frontal' },
-                { key: 'glueless', label: 'Glueless' }
+                { key: 'glueless', label: 'Glueless' },
+                { key: 'pixie', label: 'Pixie' },
+                { key: 'curly', label: 'Curly' },
+                { key: 'bob', label: 'Bob' }
               ].map(category => (
                 <button
                   key={category.key}

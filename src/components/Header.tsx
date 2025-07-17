@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShoppingBag, Search, Phone, User, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingBag, Search, Phone, User, LogOut, Menu, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -11,6 +11,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
   const { toast } = useToast();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -38,16 +39,18 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
       {/* Top Bar */}
       <div className="bg-gold text-ts-black py-2">
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
-          <div className="flex items-center space-x-4">
-            <span>🇰🇪 Free Delivery in Nairobi County | Express Delivery Available</span>
+          <div className="flex items-center space-x-4 overflow-hidden">
+            <span className="hidden sm:block">🇰🇪 Free Delivery in Nairobi County | Express Delivery Available</span>
+            <span className="sm:hidden">🇰🇪 Free Delivery Available</span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <div className="flex items-center space-x-1">
               <Phone className="w-4 h-4" />
-              <span>+254 768 174 878</span>
+              <span className="hidden sm:inline">+254 768 174 878</span>
+              <span className="sm:hidden">Call</span>
             </div>
-            <span>|</span>
-            <span>Customer Service 24/7</span>
+            <span className="hidden sm:inline">|</span>
+            <span className="hidden md:inline">Customer Service 24/7</span>
           </div>
         </div>
       </div>
@@ -66,8 +69,8 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
+          {/* Search Bar - Desktop */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-8">
             <div className="relative w-full">
               <input
                 type="text"
@@ -80,8 +83,8 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex items-center space-x-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
             <button 
               onClick={() => scrollToSection('products')}
               className="hover:text-gold transition-colors"
@@ -105,19 +108,20 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
               className="bg-gold hover:bg-gold-dark text-ts-black px-4 py-2 rounded-full font-semibold transition-all transform hover:scale-105 flex items-center space-x-1"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Cart ({cartItems.length})</span>
+              <span className="hidden lg:inline">Cart ({cartItems.length})</span>
+              <span className="lg:hidden">({cartItems.length})</span>
             </button>
             
             {/* Auth Button */}
             {user ? (
               <div className="flex items-center space-x-3">
-                <span className="text-sm">Hi, {user.user_metadata?.display_name || user.email}</span>
+                <span className="text-sm hidden lg:block">Hi, {user.user_metadata?.display_name || user.email}</span>
                 <button
                   onClick={handleSignOut}
                   className="flex items-center space-x-1 text-gold hover:text-gold-dark transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
+                  <span className="hidden lg:inline">Sign Out</span>
                 </button>
               </div>
             ) : (
@@ -126,14 +130,35 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
                 className="flex items-center space-x-1 bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-ts-black px-4 py-2 rounded-full font-semibold transition-all"
               >
                 <User className="w-4 h-4" />
-                <span>Sign In</span>
+                <span className="hidden lg:inline">Sign In</span>
               </button>
             )}
           </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center space-x-2">
+            <button 
+              onClick={() => scrollToSection('checkout')}
+              className="bg-gold hover:bg-gold-dark text-ts-black p-2 rounded-full font-semibold transition-all relative"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gold hover:text-gold-dark transition-colors p-2"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Search */}
-        <div className="md:hidden mt-4">
+        <div className="lg:hidden mt-4">
           <div className="relative">
             <input
               type="text"
@@ -145,6 +170,73 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden mt-4 bg-white rounded-lg shadow-elegant border border-gold/20 p-4">
+            <nav className="space-y-3">
+              <button 
+                onClick={() => {
+                  scrollToSection('products');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block w-full text-left py-2 px-4 hover:bg-gold hover:text-ts-black rounded-lg transition-colors"
+              >
+                Wigs
+              </button>
+              <button 
+                onClick={() => {
+                  scrollToSection('checkout');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block w-full text-left py-2 px-4 hover:bg-gold hover:text-ts-black rounded-lg transition-colors"
+              >
+                Checkout
+              </button>
+              <button 
+                onClick={() => {
+                  scrollToSection('track-order');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block w-full text-left py-2 px-4 hover:bg-gold hover:text-ts-black rounded-lg transition-colors"
+              >
+                Track Order
+              </button>
+              
+              {/* Mobile Auth */}
+              {user ? (
+                <div className="border-t pt-3 space-y-3">
+                  <div className="text-sm text-muted-foreground px-4">
+                    Hi, {user.user_metadata?.display_name || user.email}
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 w-full text-left py-2 px-4 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t pt-3">
+                  <button
+                    onClick={() => {
+                      onAuthClick();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 w-full text-left py-2 px-4 bg-gold text-ts-black rounded-lg font-semibold transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </button>
+                </div>
+              )}
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );

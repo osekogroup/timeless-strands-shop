@@ -10,6 +10,7 @@ import TrackOrder from '@/components/TrackOrder';
 import Footer from '@/components/Footer';
 import AuthPage from '@/components/AuthPage';
 import LiveChat from '@/components/LiveChat';
+import FloatingIcons from '@/components/FloatingIcons';
 import { Toaster } from '@/components/ui/toaster';
 
 interface CartItem {
@@ -104,6 +105,9 @@ const Index = () => {
       
       {/* Live Chat */}
       <LiveChat />
+      
+      {/* Floating Icons */}
+      <FloatingIcons />
       
       {/* Toast Notifications */}
       <Toaster />
