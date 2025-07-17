@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import AuthPage from '@/components/AuthPage';
 import LiveChat from '@/components/LiveChat';
 import FloatingIcons from '@/components/FloatingIcons';
+import { WishlistProvider } from '@/components/WishlistProvider';
 import { Toaster } from '@/components/ui/toaster';
 
 interface CartItem {
@@ -79,39 +80,41 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* ADMIN SECTION: All website sections - edit content directly in each component */}
-      
-      {/* 1. Header: Logo and navigation */}
-      <Header user={user} cartItems={cartItems} onAuthClick={handleAuthClick} />
-      
-      {/* 2. Hero Banner: Big bold call-to-action */}
-      <HeroBanner />
-      
-      {/* 3. Product Listing: Grid layout with product cards */}
-      <ProductListing onUpdateCart={handleUpdateCart} />
-      
-      {/* 4. Checkout Form: Customer details and payment */}
-      <CheckoutForm cartItems={cartItems} onOrderSubmit={handleOrderSubmit} />
-      
-      {/* 5. Confirmation Section: Order confirmation */}
-      <OrderConfirmation orderData={orderData} />
-      
-      {/* 6. Track Order Section: Order tracking */}
-      <TrackOrder />
-      
-      {/* 7. Footer: Contact info and links */}
-      <Footer />
-      
-      {/* Live Chat */}
-      <LiveChat />
-      
-      {/* Floating Icons */}
-      <FloatingIcons />
-      
-      {/* Toast Notifications */}
-      <Toaster />
-    </div>
+    <WishlistProvider>
+      <div className="min-h-screen bg-background">
+        {/* ADMIN SECTION: All website sections - edit content directly in each component */}
+        
+        {/* 1. Header: Logo and navigation */}
+        <Header user={user} cartItems={cartItems} onAuthClick={handleAuthClick} />
+        
+        {/* 2. Hero Banner: Big bold call-to-action */}
+        <HeroBanner />
+        
+        {/* 3. Product Listing: Grid layout with product cards */}
+        <ProductListing onUpdateCart={handleUpdateCart} />
+        
+        {/* 4. Checkout Form: Customer details and payment */}
+        <CheckoutForm cartItems={cartItems} onOrderSubmit={handleOrderSubmit} />
+        
+        {/* 5. Confirmation Section: Order confirmation */}
+        <OrderConfirmation orderData={orderData} />
+        
+        {/* 6. Track Order Section: Order tracking */}
+        <TrackOrder />
+        
+        {/* 7. Footer: Contact info and links */}
+        <Footer />
+        
+        {/* Live Chat */}
+        <LiveChat />
+        
+        {/* Floating Icons */}
+        <FloatingIcons />
+        
+        {/* Toast Notifications */}
+        <Toaster />
+      </div>
+    </WishlistProvider>
   );
 };
 

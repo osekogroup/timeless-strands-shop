@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2, Play, Video } from 'lucide-react';
+import { Star, ShoppingCart, Eye, Heart, ChevronLeft, ChevronRight, Share2, Play, Video, Scale } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useWishlist } from './WishlistProvider';
+import { toast } from 'sonner';
 
 interface ProductVariant {
   laceSize: string;
@@ -21,6 +23,7 @@ interface ProductCardProps {
   hasVideo?: boolean;
   videoLength?: string;
   onAddToCart: (product: any) => void;
+  onAddToCompare?: (product: any) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -34,13 +37,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   originalPrice,
   hasVideo = false,
   videoLength,
-  onAddToCart
+  onAddToCart,
+  onAddToCompare
 }) => {
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedLaceSize, setSelectedLaceSize] = useState('');
   const [selectedInchSize, setSelectedInchSize] = useState('');
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  
+  const isWishlisted = isInWishlist(id);
 
   // Get unique lace and inch sizes
   const laceSizes = [...new Set(variants.map(v => v.laceSize))];
@@ -74,6 +80,55 @@ const ProductCard: React.FC<ProductCardProps> = ({
       price: currentPrice,
       quantity: 1
     });
+  };
+
+  const handleWishlistToggle = () => {
+    if (isWishlisted) {
+      removeFromWishlist(id);
+      toast.success('Removed from wishlist');
+    } else {
+      addToWishlist({
+        id,
+        name,
+        image: images[0],
+        price: currentPrice
+      });
+      toast.success('Added to wishlist');
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: name,
+        text: description,
+        url: window.location.origin + `/product/${id}`,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.origin + `/product/${id}`);
+      toast.success('Product link copied to clipboard');
+    }
+  };
+
+  const handleAddToCompare = () => {
+    if (onAddToCompare) {
+      onAddToCompare({
+        id,
+        name,
+        image: images[0],
+        price: currentPrice,
+        originalPrice,
+        rating,
+        reviews,
+        laceSize: selectedLaceSize || laceSizes[0],
+        density: '180%', // Default density
+        length: selectedInchSize || inchSizes[0],
+        color: 'Natural Black', // Default color
+        features: ['Premium Human Hair', 'Free Shipping', 'Easy Returns'],
+        inStock: currentStock > 0
+      });
+      toast.success('Added to comparison');
+    }
   };
 
   return (
@@ -130,13 +185,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* Top Action Buttons */}
         <div className="absolute top-4 right-4 flex flex-col space-y-2">
           <button
-            onClick={() => setIsWishlisted(!isWishlisted)}
+            onClick={handleWishlistToggle}
             className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md"
           >
             <Heart className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-current' : 'text-gray-600'}`} />
           </button>
-          <button className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md">
+          <button 
+            onClick={handleShare}
+            className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md"
+          >
             <Share2 className="w-5 h-5 text-gray-600" />
+          </button>
+          <button 
+            onClick={handleAddToCompare}
+            className="bg-white/90 hover:bg-white p-2 rounded-full transition-colors shadow-md"
+          >
+            <Scale className="w-5 h-5 text-gray-600" />
           </button>
         </div>
 

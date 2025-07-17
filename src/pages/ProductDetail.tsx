@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Heart, Share2, Play, ShoppingCart, Plus, Minus, Check, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Star, Heart, Share2, Play, ShoppingCart, Plus, Minus, Check, Truck, Shield, RotateCcw, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -8,6 +8,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ProductReviews from '@/components/ProductReviews';
+import ProductRecommendations from '@/components/ProductRecommendations';
+import CouponSystem from '@/components/CouponSystem';
+import { useWishlist } from '@/components/WishlistProvider';
 
 // Import all product images
 import curlyHumanHairWig from '@/assets/curly-human-hair-wig.jpg';
@@ -45,13 +49,17 @@ interface Product {
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [showAuth, setShowAuth] = useState(false);
+  const [showImageZoom, setShowImageZoom] = useState(false);
+  const [activeTab, setActiveTab] = useState<'details' | 'reviews' | 'shipping'>('details');
+  
+  const isWishlisted = isInWishlist(parseInt(id || '0'));
 
   // Get current user
   const { data: user } = useQuery({
@@ -284,6 +292,22 @@ const ProductDetail: React.FC = () => {
     toast.success(`Added ${product.name} to cart!`);
   };
 
+  const handleWishlistToggle = () => {
+    const productId = parseInt(id || '0');
+    if (isWishlisted) {
+      removeFromWishlist(productId);
+      toast.success('Removed from wishlist');
+    } else {
+      addToWishlist({
+        id: productId,
+        name: product.name,
+        image: product.images[0],
+        price: currentVariant.price
+      });
+      toast.success('Added to wishlist');
+    }
+  };
+
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= currentVariant.stock) {
@@ -344,13 +368,21 @@ const ProductDetail: React.FC = () => {
                 </button>
               )}
 
-              {/* Wishlist Button */}
-              <button
-                onClick={() => setIsWishlisted(!isWishlisted)}
-                className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
-              >
-                <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-              </button>
+              {/* Action Buttons */}
+              <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                <button
+                  onClick={handleWishlistToggle}
+                  className="bg-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
+                >
+                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                </button>
+                <button
+                  onClick={() => setShowImageZoom(true)}
+                  className="bg-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
+                >
+                  <ZoomIn className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
             </div>
 
             {/* Image Thumbnails */}
@@ -523,6 +555,84 @@ const ProductDetail: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Product Details Tabs */}
+        <div className="mt-12">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8">
+              {(['details', 'reviews', 'shipping'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm capitalize ${
+                    activeTab === tab
+                      ? 'border-gold text-gold'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {tab === 'details' ? 'Product Details' : tab}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="mt-6">
+            {activeTab === 'details' && (
+              <div className="prose max-w-none">
+                <h3 className="text-lg font-semibold mb-4">Product Specifications</h3>
+                <ul className="space-y-2">
+                  <li><strong>Hair Type:</strong> 100% Virgin Human Hair</li>
+                  <li><strong>Texture:</strong> Natural</li>
+                  <li><strong>Color:</strong> Can be dyed</li>
+                  <li><strong>Care:</strong> Wash with sulfate-free shampoo</li>
+                  <li><strong>Lifespan:</strong> 12-18 months with proper care</li>
+                </ul>
+              </div>
+            )}
+            
+            {activeTab === 'reviews' && (
+              <ProductReviews 
+                productId={parseInt(id || '0')} 
+                rating={product.rating} 
+                totalReviews={product.reviews} 
+              />
+            )}
+            
+            {activeTab === 'shipping' && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Shipping & Returns</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium mb-2">Delivery Options</h4>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Standard Delivery: 2-3 business days</li>
+                      <li>• Express Delivery: Next day delivery</li>
+                      <li>• Free shipping on orders over Ksh 5,000</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-2">Return Policy</h4>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• 30-day return window</li>
+                      <li>• Free returns for defective items</li>
+                      <li>• Original packaging required</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Coupons Section */}
+        <div className="mt-12">
+          <CouponSystem />
+        </div>
+
+        {/* Recommendations */}
+        <div className="mt-12">
+          <ProductRecommendations currentProductId={parseInt(id || '0')} />
         </div>
       </div>
 
