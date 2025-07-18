@@ -204,7 +204,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              © 2024 Timeless Strands. All rights reserved. | WigPreOrder KE
+              © 2024 Timeless Strands. All rights reserved. | WigPreOrder KE | Powered by Mapema Softwares
             </div>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-gold transition-colors">Privacy Policy</a>
