@@ -289,7 +289,43 @@ const ProductDetail: React.FC = () => {
   const currentVariant = product.variants[selectedVariant];
 
   const handleAddToCart = () => {
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      image: product.images[0],
+      laceSize: currentVariant.laceSize,
+      inchSize: currentVariant.inchSize,
+      price: currentVariant.price,
+      quantity: quantity
+    };
+    
+    // Update local cart state
+    setCartItems(prev => {
+      const existingItem = prev.find(item => 
+        item.id === cartItem.id && 
+        item.laceSize === cartItem.laceSize && 
+        item.inchSize === cartItem.inchSize
+      );
+      
+      if (existingItem) {
+        return prev.map(item => 
+          item.id === cartItem.id && 
+          item.laceSize === cartItem.laceSize && 
+          item.inchSize === cartItem.inchSize
+            ? { ...item, quantity: item.quantity + cartItem.quantity }
+            : item
+        );
+      } else {
+        return [...prev, cartItem];
+      }
+    });
+    
     toast.success(`Added ${product.name} to cart!`);
+    
+    // Redirect to checkout section
+    setTimeout(() => {
+      navigate('/', { state: { scrollToCheckout: true } });
+    }, 1000);
   };
 
   const handleWishlistToggle = () => {

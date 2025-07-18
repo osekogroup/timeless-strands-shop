@@ -25,6 +25,38 @@ import curlyT4350Wig from '@/assets/curly-t4-350-4-wig.jpg';
 import fringeBobWig from '@/assets/fringe-bob-wig.jpg';
 import gradeABobWig from '@/assets/12a-grade-bob-wig.jpg';
 
+// New latest product images
+import kinkyStraightHumanHairWig from '@/assets/kinky-straight-human-hair-wig.jpg';
+import rawBrazilian4cKinkyCurlyWig from '@/assets/raw-brazilian-4c-kinky-curly-wig.jpg';
+import rawBrazilianAfroKinkyCurlyWig from '@/assets/raw-brazilian-afro-kinky-curly-wig.jpg';
+import prePluckDeepWaveIndianWig from '@/assets/pre-pluck-deep-wave-indian-wig.jpg';
+import deepwaveHumanHairWig from '@/assets/deepwave-human-hair-wig.jpg';
+import prePluckedBoneStraightIndianWig from '@/assets/pre-plucked-bone-straight-indian-wig.jpg';
+import boneStraightBlonde27Wig from '@/assets/bone-straight-blonde-27-wig.jpg';
+import coloredHumanHairBobWig from '@/assets/colored-human-hair-bob-wig.jpg';
+import highlightHumanHairBobWig from '@/assets/highlight-human-hair-bob-wig.jpg';
+import ginger350DoubleDrawnBobWig from '@/assets/ginger-350-double-drawn-bob-wig.jpg';
+import color1bDoubleDrawnBobWig from '@/assets/color-1b-double-drawn-bob-wig.jpg';
+import shortPixieCutCurlyWig from '@/assets/short-pixie-cut-curly-wig.jpg';
+import highlightPianoP427BodyWaveWig from '@/assets/highlight-piano-p4-27-body-wave-wig.jpg';
+import highlightPianoP427BoneStraightWig from '@/assets/highlight-piano-p4-27-bone-straight-wig.jpg';
+import highlightDeepWaveP427HoneyBlondeWig from '@/assets/highlight-deep-wave-p4-27-honey-blonde-wig.jpg';
+import colorB1CurlyPixieBobWig from '@/assets/color-b1-curly-pixie-bob-wig.jpg';
+import curlyColor1bHumanHairWig from '@/assets/curly-color-1b-human-hair-wig.jpg';
+import bodywaveColor99jBurgundyWig from '@/assets/bodywave-color-99j-burgundy-wig.jpg';
+import bodywaveHighlightP427Wig from '@/assets/bodywave-highlight-p4-27-wig.jpg';
+import skunkStripeBodyWaveBrownBlondeWig from '@/assets/skunk-stripe-body-wave-brown-blonde-wig.jpg';
+import bodywaveColorMix35027Wig from '@/assets/bodywave-color-mix-350-27-wig.jpg';
+import bodywaveColor350GingerWig from '@/assets/bodywave-color-350-ginger-wig.jpg';
+import brazilianJerryCurlyBrownColor4Wig from '@/assets/brazilian-jerry-curly-brown-color-4-wig.jpg';
+import brownIndianHairBoneStraightWig from '@/assets/brown-indian-hair-bone-straight-wig.jpg';
+import brownIndianHairBodyWaveWig from '@/assets/brown-indian-hair-body-wave-wig.jpg';
+import virginHairHdBoneStraightWig from '@/assets/virgin-hair-hd-bone-straight-wig.jpg';
+import braided350CurlyWig from '@/assets/braided-350-curly-wig.jpg';
+import burgundy99jBoneStraightWig from '@/assets/burgundy-99j-bone-straight-wig.jpg';
+import brazilian99jJerryCurlyWig from '@/assets/brazilian-99j-jerry-curly-wig.jpg';
+import brazilian99jBodywaveWig from '@/assets/brazilian-99j-bodywave-wig.jpg';
+
 interface CartItem {
   id: number;
   name: string;
@@ -359,6 +391,132 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
       category: "bob",
       hasVideo: true,
       videoLength: "Multiple lengths"
+    },
+    // NEWEST PRODUCTS - Complete Collection
+    {
+      id: 20,
+      name: "Kinky Straight Human Hair - 13x4 Lace, 180% Density",
+      description: "Natural color (1B) kinky straight texture. Premium human hair with 13x4 lace construction.",
+      images: [kinkyStraightHumanHairWig, kinkyStraightHumanHairWig, kinkyStraightHumanHairWig],
+      variants: [
+        { laceSize: "13x4 Lace", inchSize: "10 inches", price: 5788, stock: 5 },
+        { laceSize: "13x4 Lace", inchSize: "12 inches", price: 6183, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "14 inches", price: 6878, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "16 inches", price: 7374, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "18 inches", price: 8167, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "20 inches", price: 9158, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "22 inches", price: 11241, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "24 inches", price: 13005, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "26 inches", price: 15087, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "28 inches", price: 18360, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "30 inches", price: 22325, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "32 inches", price: 25498, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "34 inches", price: 29860, stock: 1 }
+      ],
+      rating: 4.8,
+      reviews: 156,
+      category: "straight",
+      hasVideo: true
+    },
+    {
+      id: 21,
+      name: "Raw Brazilian Hair 13x4 Glueless Front 4C Edges Afro Kinky Curly",
+      description: "Natural color (1B) with 4C edges and afro kinky curly texture. Glueless design for comfort.",
+      images: [rawBrazilian4cKinkyCurlyWig, rawBrazilian4cKinkyCurlyWig, rawBrazilian4cKinkyCurlyWig],
+      variants: [
+        { laceSize: "13x4 Glueless", inchSize: "10 inches", price: 6680, stock: 4 },
+        { laceSize: "13x4 Glueless", inchSize: "12 inches", price: 6978, stock: 4 },
+        { laceSize: "13x4 Glueless", inchSize: "14 inches", price: 7771, stock: 3 },
+        { laceSize: "13x4 Glueless", inchSize: "16 inches", price: 8267, stock: 3 },
+        { laceSize: "13x4 Glueless", inchSize: "18 inches", price: 8960, stock: 2 },
+        { laceSize: "13x4 Glueless", inchSize: "20 inches", price: 9951, stock: 2 },
+        { laceSize: "13x4 Glueless", inchSize: "22 inches", price: 12134, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "24 inches", price: 13899, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "26 inches", price: 15981, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "28 inches", price: 19253, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "30 inches", price: 23219, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "32 inches", price: 26391, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "34 inches", price: 30753, stock: 1 }
+      ],
+      rating: 4.9,
+      reviews: 189,
+      category: "curly",
+      hasVideo: true
+    },
+    {
+      id: 22,
+      name: "Raw Brazilian Hair 13x4 Glueless Afro Kinky Curly",
+      description: "Natural color (1B) with afro kinky curly texture. Raw Brazilian hair quality.",
+      images: [rawBrazilianAfroKinkyCurlyWig, rawBrazilianAfroKinkyCurlyWig, rawBrazilianAfroKinkyCurlyWig],
+      variants: [
+        { laceSize: "13x4 Glueless", inchSize: "10 inches", price: 6580, stock: 4 },
+        { laceSize: "13x4 Glueless", inchSize: "12 inches", price: 6978, stock: 4 },
+        { laceSize: "13x4 Glueless", inchSize: "14 inches", price: 7671, stock: 3 },
+        { laceSize: "13x4 Glueless", inchSize: "16 inches", price: 8167, stock: 3 },
+        { laceSize: "13x4 Glueless", inchSize: "18 inches", price: 8960, stock: 2 },
+        { laceSize: "13x4 Glueless", inchSize: "20 inches", price: 9951, stock: 2 },
+        { laceSize: "13x4 Glueless", inchSize: "22 inches", price: 12034, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "24 inches", price: 13799, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "26 inches", price: 15881, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "28 inches", price: 19153, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "30 inches", price: 23119, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "32 inches", price: 26291, stock: 1 },
+        { laceSize: "13x4 Glueless", inchSize: "34 inches", price: 30653, stock: 1 }
+      ],
+      rating: 4.8,
+      reviews: 167,
+      category: "curly",
+      hasVideo: true
+    },
+    {
+      id: 23,
+      name: "Pre Pluck Deep Wave Raw Indian Human Hair Glueless Transparent 13x4 Frontal",
+      description: "Natural color (1B) with deep wave texture. Pre-plucked and transparent lace for natural look.",
+      images: [prePluckDeepWaveIndianWig, prePluckDeepWaveIndianWig, prePluckDeepWaveIndianWig],
+      variants: [
+        { laceSize: "13x4 Transparent", inchSize: "10 inches", price: 5528, stock: 5 },
+        { laceSize: "13x4 Transparent", inchSize: "12 inches", price: 5924, stock: 4 },
+        { laceSize: "13x4 Transparent", inchSize: "14 inches", price: 6618, stock: 4 },
+        { laceSize: "13x4 Transparent", inchSize: "16 inches", price: 7114, stock: 3 },
+        { laceSize: "13x4 Transparent", inchSize: "18 inches", price: 7907, stock: 3 },
+        { laceSize: "13x4 Transparent", inchSize: "20 inches", price: 8898, stock: 2 },
+        { laceSize: "13x4 Transparent", inchSize: "22 inches", price: 10981, stock: 2 },
+        { laceSize: "13x4 Transparent", inchSize: "24 inches", price: 12745, stock: 1 },
+        { laceSize: "13x4 Transparent", inchSize: "26 inches", price: 14827, stock: 1 },
+        { laceSize: "13x4 Transparent", inchSize: "28 inches", price: 18100, stock: 1 },
+        { laceSize: "13x4 Transparent", inchSize: "30 inches", price: 22065, stock: 1 },
+        { laceSize: "13x4 Transparent", inchSize: "32 inches", price: 25238, stock: 1 },
+        { laceSize: "13x4 Transparent", inchSize: "34 inches", price: 29600, stock: 1 }
+      ],
+      rating: 4.9,
+      reviews: 143,
+      category: "wave",
+      hasVideo: true
+    },
+    {
+      id: 24,
+      name: "Deep Wave Human Hair Wig - 13x4 Lace",
+      description: "Natural color (1B) with beautiful deep wave texture. Premium construction and styling.",
+      images: [deepwaveHumanHairWig, deepwaveHumanHairWig, deepwaveHumanHairWig],
+      variants: [
+        { laceSize: "13x4 Lace", inchSize: "10 inches", price: 6320, stock: 5 },
+        { laceSize: "13x4 Lace", inchSize: "12 inches", price: 6718, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "14 inches", price: 7411, stock: 4 },
+        { laceSize: "13x4 Lace", inchSize: "16 inches", price: 7907, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "18 inches", price: 8700, stock: 3 },
+        { laceSize: "13x4 Lace", inchSize: "20 inches", price: 9691, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "22 inches", price: 11774, stock: 2 },
+        { laceSize: "13x4 Lace", inchSize: "24 inches", price: 13539, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "26 inches", price: 15621, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "28 inches", price: 18893, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "30 inches", price: 22859, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "32 inches", price: 26031, stock: 1 },
+        { laceSize: "13x4 Lace", inchSize: "34 inches", price: 30393, stock: 1 }
+      ],
+      rating: 4.8,
+      reviews: 178,
+      category: "wave",
+      hasVideo: true
     }
   ];
 
