@@ -77,21 +77,8 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // COMPLETE WIG COLLECTION - All Products
-  const products = [
-    {
-      id: 1,
-      name: "Curly Human Hair Wig",
-      description: "Beautiful bouncy curls with natural black color. Premium human hair that maintains its curl pattern and shine.",
-      images: [curlyHumanHairWig, curlyHumanHairWig, curlyHumanHairWig],
-      variants: [
-        { laceSize: "4x4 Closure", inchSize: "16 inches", price: 4500, stock: 8 },
-      ],
-      rating: 4.9,
-      reviews: 234,
-      category: "closure",
-      hasVideo: false
-    },
+  // Import products from shared data file
+  import { products } from '@/data/products';
     {
       id: 2,
       name: "4x4 Lace Closure BOB Wig - 180% Density",
