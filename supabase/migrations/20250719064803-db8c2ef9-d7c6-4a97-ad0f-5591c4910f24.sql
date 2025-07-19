@@ -1,8 +1,8 @@
 -- Insert initial admin user (replace with your email)
 INSERT INTO public.admin_roles (user_id, email, is_admin) 
 VALUES (
-  '00000000-0000-0000-0000-000000000000', -- Placeholder user_id, update after signup
-  'your-email@example.com', -- Replace with your actual email
+  'cd34e336-55da-447e-a876-33d5e09a1e72', -- Placeholder user_id, update after signup
+  'osekogroup@gmail.com', -- Replace with your actual email
   true
 );
 
