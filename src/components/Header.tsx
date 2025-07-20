@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { ShoppingBag, Search, Phone, User, LogOut, Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShoppingBag, Search, Phone, User, LogOut, Menu, X, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,6 +13,28 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
   const { toast } = useToast();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase.rpc('is_admin', {
+            user_id: user.id
+          });
+          if (!error) {
+            setIsAdmin(data || false);
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [user]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -111,6 +134,17 @@ const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
               <span className="hidden lg:inline">Cart ({cartItems.length})</span>
               <span className="lg:hidden">({cartItems.length})</span>
             </button>
+            
+            {/* Admin Button */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-full font-semibold transition-all transform hover:scale-105"
+              >
+                <Shield className="w-4 h-4" />
+                <span className="hidden lg:inline">Admin</span>
+              </Link>
+            )}
             
             {/* Auth Button */}
             {user ? (

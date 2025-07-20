@@ -189,6 +189,17 @@ export type Database = {
         Args: { admin_email: string }
         Returns: undefined
       }
+      get_all_users: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          email: string
+          created_at: string
+          last_sign_in_at: string
+          email_confirmed_at: string
+          is_admin: boolean
+        }[]
+      }
       is_admin: {
         Args: { user_id: string }
         Returns: boolean

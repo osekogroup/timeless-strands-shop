@@ -12,7 +12,8 @@ interface User {
   email: string;
   created_at: string;
   last_sign_in_at: string;
-  is_admin?: boolean;
+  email_confirmed_at: string;
+  is_admin: boolean;
 }
 
 const UserManagement: React.FC = () => {
@@ -28,31 +29,12 @@ const UserManagement: React.FC = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Get all users (limited to admin view)
-      const { data: authUsers, error: authError } = await supabase
-        .from('admin_roles')
-        .select('*');
+      // Use the new function to get all users with admin status
+      const { data: allUsers, error } = await supabase.rpc('get_all_users');
 
-      if (authError) throw authError;
+      if (error) throw error;
 
-      // Get admin roles
-      const { data: adminRoles, error: adminError } = await supabase
-        .from('admin_roles')
-        .select('user_id, email, is_admin');
-
-      if (adminError) throw adminError;
-
-      // For demo purposes, we'll show registered users via admin_roles table
-      // In a real app, you might need server-side function to fetch auth.users
-      const combinedUsers = adminRoles?.map(role => ({
-        id: role.user_id,
-        email: role.email,
-        created_at: new Date().toISOString(),
-        last_sign_in_at: new Date().toISOString(),
-        is_admin: role.is_admin
-      })) || [];
-
-      setUsers(combinedUsers);
+      setUsers(allUsers || []);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast.error('Failed to fetch users');
@@ -159,9 +141,18 @@ const UserManagement: React.FC = () => {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    User ID: {user.id}
-                  </p>
+                  <div className="text-sm text-muted-foreground space-y-1">
+                    <p>User ID: {user.id}</p>
+                    <p>Joined: {new Date(user.created_at).toLocaleDateString()}</p>
+                    {user.last_sign_in_at && (
+                      <p>Last login: {new Date(user.last_sign_in_at).toLocaleDateString()}</p>
+                    )}
+                    {!user.email_confirmed_at && (
+                      <Badge variant="outline" className="text-orange-600 border-orange-600">
+                        Email not verified
+                      </Badge>
+                    )}
+                  </div>
                 </div>
 
                 <Button
