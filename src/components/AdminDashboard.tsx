@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import UserManagement from './UserManagement';
 
 interface Product {
   id: string;
@@ -360,16 +362,25 @@ const AdminDashboard: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your wig collection</p>
+          <p className="text-muted-foreground">Manage your store and users</p>
         </div>
-        
-        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-          <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setEditingProduct(null); }}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Product
-            </Button>
-          </DialogTrigger>
+      </div>
+
+      <Tabs defaultValue="products" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="products">Product Management</TabsTrigger>
+          <TabsTrigger value="users">User Management</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="products" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+              <DialogTrigger asChild>
+                <Button onClick={() => { resetForm(); setEditingProduct(null); }}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Product
+                </Button>
+              </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
@@ -688,11 +699,17 @@ const AdminDashboard: React.FC = () => {
         ))}
       </div>
 
-      {filteredProducts.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">No products found.</p>
-        </div>
-      )}
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No products found.</p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="users">
+          <UserManagement />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
