@@ -271,9 +271,10 @@ const AdminDashboard: React.FC = () => {
             const { data: uploadData, error: uploadError } = await supabase.storage
               .from('product-images')
               .upload(fileName, image.file);
-            if (uploadError) {
-              toast.error('Failed to upload image');
-              continue;
+                if (uploadError) {
+                  console.error('Supabase image upload error:', uploadError);
+                  toast.error(`Failed to upload image: ${uploadError.message || uploadError}`);
+                  continue;
             }
             // Get public URL
             const { data: publicUrlData } = supabase.storage
