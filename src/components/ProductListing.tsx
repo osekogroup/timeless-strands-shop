@@ -33,6 +33,7 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
+      console.log('Fetched products from Supabase:', data, 'Error:', error);
       if (error) {
         console.error('Error fetching products from Supabase:', error);
         setDbProducts([]);
