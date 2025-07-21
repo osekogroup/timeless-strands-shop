@@ -210,8 +210,8 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
             id={product.id}
             name={product.name}
             description={product.description}
-            images={product.images}
-            variants={product.variants}
+            images={product.images || []}
+            variants={product.variants || []}
             rating={product.rating}
             reviews={product.reviews}
             hasVideo={product.hasVideo}
@@ -229,5 +229,6 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
     </section>
   );
 };
+
 
 export default ProductListing;
