@@ -60,21 +60,37 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
         return;
       }
       // Attach images and variants to each product
-      const productsWithDetails = (productsData || []).map(product => ({
-        ...product,
-        images: imagesData
+      const productsWithDetails = (productsData || []).map(product => {
+        // For each image, get public URL if not already a full URL
+        const productImages = imagesData
           .filter(img => img.product_id === product.id)
           .sort((a, b) => a.display_order - b.display_order)
-          .map(img => img.image_url),
-        variants: variantsData
-          .filter(variant => variant.product_id === product.id)
-          .map(variant => ({
-            laceSize: variant.lace_size,
-            inchSize: variant.inch_size,
-            price: (variant.price || 0) / 100, // convert cents to KSH
-            stock: variant.stock
-          }))
-      }));
+          .map(img => {
+            // If already a public URL, use it; otherwise, get public URL from Supabase
+            if (img.image_url && img.image_url.startsWith('http')) {
+              return img.image_url;
+            } else if (img.image_url) {
+              // Try to get public URL from Supabase Storage
+              const { data: publicUrlData } = supabase.storage
+                .from('product-images')
+                .getPublicUrl(img.image_url);
+              return publicUrlData?.publicUrl || '';
+            }
+            return '';
+          });
+        return {
+          ...product,
+          images: productImages,
+          variants: variantsData
+            .filter(variant => variant.product_id === product.id)
+            .map(variant => ({
+              laceSize: variant.lace_size,
+              inchSize: variant.inch_size,
+              price: (variant.price || 0) / 100, // convert cents to KSH
+              stock: variant.stock
+            }))
+        };
+      });
       setDbProducts(productsWithDetails);
       setLoading(false);
     };
