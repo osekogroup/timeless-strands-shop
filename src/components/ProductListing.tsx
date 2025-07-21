@@ -29,17 +29,53 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
   useEffect(() => {
     const fetchDbProducts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      // Fetch all products
+      const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
-      console.log('Fetched products from Supabase:', data, 'Error:', error);
-      if (error) {
-        console.error('Error fetching products from Supabase:', error);
+      if (productsError) {
+        console.error('Error fetching products from Supabase:', productsError);
         setDbProducts([]);
-      } else {
-        setDbProducts(data || []);
+        setLoading(false);
+        return;
       }
+      // Fetch all images and variants
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('product_images')
+        .select('*');
+      if (imagesError) {
+        console.error('Error fetching images from Supabase:', imagesError);
+        setDbProducts([]);
+        setLoading(false);
+        return;
+      }
+      const { data: variantsData, error: variantsError } = await supabase
+        .from('product_variants')
+        .select('*');
+      if (variantsError) {
+        console.error('Error fetching variants from Supabase:', variantsError);
+        setDbProducts([]);
+        setLoading(false);
+        return;
+      }
+      // Attach images and variants to each product
+      const productsWithDetails = (productsData || []).map(product => ({
+        ...product,
+        images: imagesData
+          .filter(img => img.product_id === product.id)
+          .sort((a, b) => a.display_order - b.display_order)
+          .map(img => img.image_url),
+        variants: variantsData
+          .filter(variant => variant.product_id === product.id)
+          .map(variant => ({
+            laceSize: variant.lace_size,
+            inchSize: variant.inch_size,
+            price: (variant.price || 0) / 100, // convert cents to KSH
+            stock: variant.stock
+          }))
+      }));
+      setDbProducts(productsWithDetails);
       setLoading(false);
     };
     fetchDbProducts();
