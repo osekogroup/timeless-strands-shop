@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import { Filter, SlidersHorizontal, Grid3X3, LayoutGrid } from 'lucide-react';
 import { products } from '@/data/products';
-import { supabase } from '@/integrations/supabase/client';
 
 interface CartItem {
   id: number;
@@ -23,26 +22,6 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [dbProducts, setDbProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchDbProducts = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) {
-        console.error('Error fetching products from Supabase:', error);
-        setDbProducts([]);
-      } else {
-        setDbProducts(data || []);
-      }
-      setLoading(false);
-    };
-    fetchDbProducts();
-  }, []);
 
   const handleAddToCart = (cartItem: CartItem) => {
     const existingItemIndex = cartItems.findIndex(
@@ -63,8 +42,7 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
     onUpdateCart(newCartItems);
   };
 
-  const allProducts = [...products, ...dbProducts];
-  const filteredProducts = allProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     if (filterCategory === 'all') return true;
     return product.category === filterCategory;
   });
@@ -72,13 +50,13 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case 'price-low':
-        return Math.min(...(a.variants || []).map((v: any) => v.price)) - Math.min(...(b.variants || []).map((v: any) => v.price));
+        return Math.min(...a.variants.map(v => v.price)) - Math.min(...b.variants.map(v => v.price));
       case 'price-high':
-        return Math.max(...(b.variants || []).map((v: any) => v.price)) - Math.max(...(a.variants || []).map((v: any) => v.price));
+        return Math.max(...b.variants.map(v => v.price)) - Math.max(...a.variants.map(v => v.price));
       case 'rating':
-        return (b.rating || 0) - (a.rating || 0);
+        return b.rating - a.rating;
       case 'name':
-        return (a.name || '').localeCompare(b.name || '');
+        return a.name.localeCompare(b.name);
       default:
         return 0;
     }
@@ -86,11 +64,6 @@ const ProductListing: React.FC<ProductListingProps> = ({ onUpdateCart }) => {
 
   return (
     <section className="py-8 px-4 max-w-7xl mx-auto">
-      {loading && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">Loading products...</p>
-        </div>
-      )}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex flex-wrap gap-2">
           <button
