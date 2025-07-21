@@ -104,6 +104,7 @@ const AdminDashboard: React.FC = () => {
   const checkAdminStatus = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('Supabase user:', user);
       if (!user) {
         toast.error('Please log in to access admin dashboard');
         return;
@@ -114,6 +115,7 @@ const AdminDashboard: React.FC = () => {
         .select('is_admin')
         .eq('user_id', user.id)
         .single();
+      console.log('Admin roles query result:', adminData, 'Error:', error);
 
       if (error || !adminData?.is_admin) {
         toast.error('Access denied. Admin privileges required.');
