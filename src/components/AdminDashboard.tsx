@@ -731,20 +731,26 @@ const AdminDashboard: React.FC = () => {
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            description={product.description}
-            images={product.images || []}
-            variants={product.variants || []}
-            rating={product.rating}
-            reviews={product.reviews}
-            originalPrice={undefined}
-            hasVideo={product.has_video}
-            videoLength={product.video_length}
-            onAddToCart={() => {}}
-          />
+          <div key={product.id} className="relative">
+            <ProductCard
+              id={product.id}
+              name={product.name}
+              description={product.description}
+              images={product.images || []}
+              variants={product.variants || []}
+              rating={product.rating}
+              reviews={product.reviews}
+              originalPrice={undefined}
+              hasVideo={product.has_video}
+              videoLength={product.video_length}
+              onAddToCart={() => {}}
+            />
+            <div className="absolute top-2 right-2 flex gap-2">
+              <Button size="sm" variant="outline" onClick={() => startEdit(product)}>
+                <Edit className="w-4 h-4 mr-1" /> Edit
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
 
