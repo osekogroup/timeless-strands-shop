@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserManagement from './UserManagement';
+import ProductCard from './ProductCard';
 
 interface Product {
   id: string;
@@ -730,39 +731,20 @@ const AdminDashboard: React.FC = () => {
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts.map((product) => (
-          <Card key={product.id}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <CardTitle className="text-lg">{product.name}</CardTitle>
-                  <CardDescription className="mt-1">
-                    {product.description && product.description.length > 100
-                      ? `${product.description.substring(0, 100)}...`
-                      : product.description
-                    }
-                  </CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => startEdit(product)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(product.id)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Badge variant="secondary">{product.category}</Badge>
-                {product.has_video && <Badge variant="outline">Video</Badge>}
-              </div>
-              <div className="text-sm text-muted-foreground space-y-1">
-                <div>Rating: {product.rating}/5 ({product.reviews} reviews)</div>
-                <div>Created: {new Date(product.created_at).toLocaleDateString()}</div>
-              </div>
-            </CardContent>
-          </Card>
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            description={product.description}
+            images={product.images || []}
+            variants={product.variants || []}
+            rating={product.rating}
+            reviews={product.reviews}
+            originalPrice={undefined}
+            hasVideo={product.has_video}
+            videoLength={product.video_length}
+            onAddToCart={() => {}}
+          />
         ))}
       </div>
 
