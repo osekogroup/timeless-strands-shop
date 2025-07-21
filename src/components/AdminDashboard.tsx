@@ -59,6 +59,7 @@ interface ProductFormData {
   images: Array<{
     image_url: string;
     display_order: number;
+    file?: File | null;
   }>;
 }
 
@@ -79,7 +80,7 @@ const AdminDashboard: React.FC = () => {
     has_video: false,
     video_length: '',
     variants: [{ lace_size: '', inch_size: '', price: 0, stock: 0 }],
-    images: [{ image_url: '', display_order: 0 }]
+    images: [{ image_url: '', display_order: 0, file: null }]
   });
 
   const categories = [
@@ -137,6 +138,7 @@ const AdminDashboard: React.FC = () => {
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
+      console.log('Fetched products from Supabase:', productsData, 'Error:', error);
 
       if (error) throw error;
       setProducts(productsData || []);
@@ -221,25 +223,42 @@ const AdminDashboard: React.FC = () => {
         }
       }
 
-      // Handle images
+      // Handle images (upload to Supabase Storage if file is present)
       if (productData && formData.images.length > 0) {
-        // Delete existing images if editing
         if (editingProduct) {
           await supabase
             .from('product_images')
             .delete()
             .eq('product_id', productData.id);
         }
-
-        // Insert new images
-        const imagesToInsert = formData.images
-          .filter(image => image.image_url)
-          .map(image => ({
-            product_id: productData.id,
-            image_url: image.image_url,
-            display_order: image.display_order
-          }));
-
+        const imagesToInsert = [];
+        for (const image of formData.images) {
+          let imageUrl = image.image_url;
+          if (image.file) {
+            // Upload file to Supabase Storage
+            const fileExt = image.file.name.split('.').pop();
+            const fileName = `${productData.id}-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+            const { data: uploadData, error: uploadError } = await supabase.storage
+              .from('product-images')
+              .upload(fileName, image.file);
+            if (uploadError) {
+              toast.error('Failed to upload image');
+              continue;
+            }
+            // Get public URL
+            const { data: publicUrlData } = supabase.storage
+              .from('product-images')
+              .getPublicUrl(fileName);
+            imageUrl = publicUrlData?.publicUrl || '';
+          }
+          if (imageUrl) {
+            imagesToInsert.push({
+              product_id: productData.id,
+              image_url: imageUrl,
+              display_order: image.display_order
+            });
+          }
+        }
         if (imagesToInsert.length > 0) {
           await supabase
             .from('product_images')
@@ -285,7 +304,7 @@ const AdminDashboard: React.FC = () => {
       has_video: false,
       video_length: '',
       variants: [{ lace_size: '', inch_size: '', price: 0, stock: 0 }],
-      images: [{ image_url: '', display_order: 0 }]
+      images: [{ image_url: '', display_order: 0, file: null }]
     });
   };
 
@@ -306,7 +325,7 @@ const AdminDashboard: React.FC = () => {
   const addImage = () => {
     setFormData(prev => ({
       ...prev,
-      images: [...prev.images, { image_url: '', display_order: prev.images.length }]
+      images: [...prev.images, { image_url: '', display_order: prev.images.length, file: null }]
     }));
   };
 
@@ -328,7 +347,7 @@ const AdminDashboard: React.FC = () => {
       has_video: product.has_video,
       video_length: product.video_length || '',
       variants: [{ lace_size: '', inch_size: '', price: 0, stock: 0 }],
-      images: [{ image_url: '', display_order: 0 }]
+      images: [{ image_url: '', display_order: 0, file: null }]
     });
     setShowAddDialog(true);
   };
@@ -586,12 +605,30 @@ const AdminDashboard: React.FC = () => {
                         onChange={(e) => {
                           const newImages = [...formData.images];
                           newImages[index].image_url = e.target.value;
+                          newImages[index].file = null;
                           setFormData(prev => ({ ...prev, images: newImages }));
                         }}
                         placeholder="https://example.com/image.jpg"
+                        disabled={!!image.file}
                       />
+                      <Label>Or Upload Image</Label>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0] || null;
+                          const newImages = [...formData.images];
+                          newImages[index].file = file;
+                          if (file) {
+                            newImages[index].image_url = '';
+                          }
+                          setFormData(prev => ({ ...prev, images: newImages }));
+                        }}
+                      />
+                      {image.file && (
+                        <span className="text-xs text-muted-foreground">Selected: {image.file.name}</span>
+                      )}
                     </div>
-                    
                     <div className="w-24 space-y-2">
                       <Label>Order</Label>
                       <Input
@@ -605,7 +642,6 @@ const AdminDashboard: React.FC = () => {
                         }}
                       />
                     </div>
-                    
                     {formData.images.length > 1 && (
                       <Button
                         type="button"
