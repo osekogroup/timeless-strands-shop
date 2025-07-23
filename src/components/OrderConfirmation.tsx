@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle, Download, Clock, Phone, Mail, ShoppingBag } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 interface OrderData {
   orderNumber: string;
@@ -22,7 +23,27 @@ interface OrderConfirmationProps {
 
 const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData }) => {
   const handleDownloadReceipt = () => {
-    window.print();
+    if (!orderData) return;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text('Order Receipt', 10, 15);
+
+    doc.setFontSize(12);
+    doc.text(`Order #: ${orderData.orderNumber}`, 10, 30);
+    doc.text(`Date: ${new Date(orderData.orderDate).toLocaleString('en-KE')}`, 10, 38);
+    doc.text(`Name: ${orderData.customerName}`, 10, 46);
+    doc.text(`Email: ${orderData.email}`, 10, 54);
+    doc.text(`Phone: ${orderData.phone}`, 10, 62);
+    doc.text(`Delivery: ${orderData.deliveryMethod}${orderData.county ? ' (' + orderData.county + ')' : ''}`, 10, 70);
+
+    doc.text(`Subtotal: Ksh ${orderData.subtotal.toLocaleString()}`, 10, 78);
+    doc.text(`Delivery Fee: Ksh ${orderData.deliveryFee.toLocaleString()}`, 10, 86);
+    doc.text(`Total Paid: Ksh ${orderData.total.toLocaleString()}`, 10, 94);
+    doc.text(`M-Pesa Transaction ID: ${orderData.mpesaTransactionId}`, 10, 102);
+
+    doc.save(`Order_${orderData.orderNumber}_Receipt.pdf`);
   };
 
   if (!orderData) {
@@ -193,11 +214,11 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData }) => {
                 <h4 className="font-bold text-lg mb-4">Need Help?</h4>
                 <div className="flex justify-center space-x-8">
                   <a 
-                    href="tel:+254712345678"
+                    href="tel:+254768174878"
                     className="flex items-center space-x-2 text-gold hover:text-gold-dark"
                   >
                     <Phone className="w-5 h-5" />
-                    <span>+254 712 345 678</span>
+                    <span>+254 768 174878</span>
                   </a>
                   <a 
                     href="mailto:support@timelessstrands.co.ke"
