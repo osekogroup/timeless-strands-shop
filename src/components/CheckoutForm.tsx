@@ -185,6 +185,33 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
                       <span>Ksh {total.toLocaleString()}</span>
                     </div>
                   </div>
+                  {/* Mpesa STK Push Option */}
+                  <div className="mt-6 p-4 border rounded bg-green-50">
+                    <h4 className="font-semibold text-green-800 mb-2">Quick M-Pesa Payment</h4>
+                    <form
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const phone = e.target.phone.value;
+                        if (!phone.match(/^07\d{8}$/)) {
+                          alert('Enter a valid Safaricom number (07XXXXXXXX)');
+                          return;
+                        }
+                        alert('Sending payment prompt...');
+                        // TODO: Replace with real STK Push API call
+                        await new Promise(res => setTimeout(res, 1500));
+                        alert(`Payment prompt sent to ${phone} for Ksh ${total}`);
+                      }}
+                    >
+                      <label className="block text-sm font-semibold text-green-800 mb-2" htmlFor="phone">
+                        Enter your M-Pesa phone number
+                      </label>
+                      <div className="flex gap-2">
+                        <input name="phone" type="tel" placeholder="07XXXXXXXX" required className="flex-1 p-3 border border-green-300 rounded-lg" />
+                        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold">Pay</button>
+                      </div>
+                      <div className="text-xs text-green-700 mt-1">You will receive a prompt on your phone. Enter your PIN to complete payment.</div>
+                    </form>
+                  </div>
                 </div>
               )}
             </div>
