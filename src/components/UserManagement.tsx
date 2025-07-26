@@ -58,32 +58,33 @@ const UserManagement: React.FC = () => {
     }
 
     try {
-      // Check if current user is admin before allowing user creation
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-      if (!currentUser) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         toast.error('Authentication required');
         return;
       }
 
-      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
-        user_id: currentUser.id 
+      const response = await fetch(`https://bnahhzscrpbgbeaebvtt.supabase.co/functions/v1/admin-user-management`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'createUser',
+          userData: {
+            email: newUserForm.email,
+            password: newUserForm.password,
+            displayName: newUserForm.displayName
+          }
+        }),
       });
 
-      if (!isCurrentUserAdmin) {
-        toast.error('Admin privileges required');
-        return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create user');
       }
-
-      const { data, error } = await supabase.auth.admin.createUser({
-        email: newUserForm.email,
-        password: newUserForm.password,
-        email_confirm: true,
-        user_metadata: {
-          display_name: newUserForm.displayName
-        }
-      });
-
-      if (error) throw error;
       
       toast.success(`User ${newUserForm.email} created successfully`);
       setNewUserForm({ email: '', password: '', displayName: '' });
@@ -102,30 +103,33 @@ const UserManagement: React.FC = () => {
     }
 
     try {
-      // Check if current user is admin before allowing user updates
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-      if (!currentUser) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         toast.error('Authentication required');
         return;
       }
 
-      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
-        user_id: currentUser.id 
+      const response = await fetch(`https://bnahhzscrpbgbeaebvtt.supabase.co/functions/v1/admin-user-management`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'updateUser',
+          userData: {
+            userId: editingUser.id,
+            email: editUserForm.email,
+            displayName: editUserForm.displayName
+          }
+        }),
       });
 
-      if (!isCurrentUserAdmin) {
-        toast.error('Admin privileges required');
-        return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to update user');
       }
-
-      const { error } = await supabase.auth.admin.updateUserById(editingUser.id, {
-        email: editUserForm.email,
-        user_metadata: {
-          display_name: editUserForm.displayName
-        }
-      });
-
-      if (error) throw error;
       
       toast.success(`User updated successfully`);
       setEditingUser(null);
@@ -140,25 +144,31 @@ const UserManagement: React.FC = () => {
 
   const deleteUser = async (userId: string, email: string) => {
     try {
-      // Check if current user is admin before allowing user deletion
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-      if (!currentUser) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         toast.error('Authentication required');
         return;
       }
 
-      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
-        user_id: currentUser.id 
+      const response = await fetch(`https://bnahhzscrpbgbeaebvtt.supabase.co/functions/v1/admin-user-management`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'deleteUser',
+          userData: {
+            userId
+          }
+        }),
       });
 
-      if (!isCurrentUserAdmin) {
-        toast.error('Admin privileges required');
-        return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete user');
       }
-
-      const { error } = await supabase.auth.admin.deleteUser(userId);
-
-      if (error) throw error;
       
       toast.success(`User ${email} deleted successfully`);
       await fetchUsers();
