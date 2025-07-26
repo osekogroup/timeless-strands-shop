@@ -58,6 +58,22 @@ const UserManagement: React.FC = () => {
     }
 
     try {
+      // Check if current user is admin before allowing user creation
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) {
+        toast.error('Authentication required');
+        return;
+      }
+
+      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
+        user_id: currentUser.id 
+      });
+
+      if (!isCurrentUserAdmin) {
+        toast.error('Admin privileges required');
+        return;
+      }
+
       const { data, error } = await supabase.auth.admin.createUser({
         email: newUserForm.email,
         password: newUserForm.password,
@@ -86,6 +102,22 @@ const UserManagement: React.FC = () => {
     }
 
     try {
+      // Check if current user is admin before allowing user updates
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) {
+        toast.error('Authentication required');
+        return;
+      }
+
+      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
+        user_id: currentUser.id 
+      });
+
+      if (!isCurrentUserAdmin) {
+        toast.error('Admin privileges required');
+        return;
+      }
+
       const { error } = await supabase.auth.admin.updateUserById(editingUser.id, {
         email: editUserForm.email,
         user_metadata: {
@@ -108,6 +140,22 @@ const UserManagement: React.FC = () => {
 
   const deleteUser = async (userId: string, email: string) => {
     try {
+      // Check if current user is admin before allowing user deletion
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) {
+        toast.error('Authentication required');
+        return;
+      }
+
+      const { data: isCurrentUserAdmin } = await supabase.rpc('is_admin', { 
+        user_id: currentUser.id 
+      });
+
+      if (!isCurrentUserAdmin) {
+        toast.error('Admin privileges required');
+        return;
+      }
+
       const { error } = await supabase.auth.admin.deleteUser(userId);
 
       if (error) throw error;
