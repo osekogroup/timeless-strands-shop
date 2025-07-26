@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Users, Shield, ShieldCheck } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Search, Users, Shield, ShieldCheck, Plus, Edit, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface User {
@@ -21,6 +24,11 @@ const UserManagement: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [processingUsers, setProcessingUsers] = useState<Set<string>>(new Set());
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [newUserForm, setNewUserForm] = useState({ email: '', password: '', displayName: '' });
+  const [editUserForm, setEditUserForm] = useState({ email: '', displayName: '' });
 
   useEffect(() => {
     fetchUsers();
@@ -40,6 +48,75 @@ const UserManagement: React.FC = () => {
       toast.error('Failed to fetch users');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createUser = async () => {
+    if (!newUserForm.email || !newUserForm.password) {
+      toast.error('Email and password are required');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.admin.createUser({
+        email: newUserForm.email,
+        password: newUserForm.password,
+        email_confirm: true,
+        user_metadata: {
+          display_name: newUserForm.displayName
+        }
+      });
+
+      if (error) throw error;
+      
+      toast.success(`User ${newUserForm.email} created successfully`);
+      setNewUserForm({ email: '', password: '', displayName: '' });
+      setIsCreateDialogOpen(false);
+      await fetchUsers();
+    } catch (error) {
+      console.error('Error creating user:', error);
+      toast.error('Failed to create user');
+    }
+  };
+
+  const updateUser = async () => {
+    if (!editingUser || !editUserForm.email) {
+      toast.error('Email is required');
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.admin.updateUserById(editingUser.id, {
+        email: editUserForm.email,
+        user_metadata: {
+          display_name: editUserForm.displayName
+        }
+      });
+
+      if (error) throw error;
+      
+      toast.success(`User updated successfully`);
+      setEditingUser(null);
+      setEditUserForm({ email: '', displayName: '' });
+      setIsEditDialogOpen(false);
+      await fetchUsers();
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast.error('Failed to update user');
+    }
+  };
+
+  const deleteUser = async (userId: string, email: string) => {
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(userId);
+
+      if (error) throw error;
+      
+      toast.success(`User ${email} deleted successfully`);
+      await fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
     }
   };
 
@@ -81,6 +158,15 @@ const UserManagement: React.FC = () => {
     }
   };
 
+  const startEdit = (user: User) => {
+    setEditingUser(user);
+    setEditUserForm({
+      email: user.email,
+      displayName: '' // We don't have display name in the user data currently
+    });
+    setIsEditDialogOpen(true);
+  };
+
   const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -104,9 +190,58 @@ const UserManagement: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
-          User Management
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            User Management
+          </div>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Create User
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New User</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={newUserForm.email}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
+                    placeholder="user@example.com"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={newUserForm.password}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })}
+                    placeholder="Enter password"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="displayName">Display Name (Optional)</Label>
+                  <Input
+                    id="displayName"
+                    value={newUserForm.displayName}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, displayName: e.target.value })}
+                    placeholder="Enter display name"
+                  />
+                </div>
+                <Button onClick={createUser} className="w-full">
+                  Create User
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -155,38 +290,103 @@ const UserManagement: React.FC = () => {
                   </div>
                 </div>
 
-                <Button
-                  variant={user.is_admin ? "destructive" : "default"}
-                  size="sm"
-                  onClick={() => toggleAdminStatus(user.id, user.email, user.is_admin || false)}
-                  disabled={processingUsers.has(user.id)}
-                  className="min-w-[120px]"
-                >
-                  {processingUsers.has(user.id) ? (
-                    'Processing...'
-                  ) : user.is_admin ? (
-                    <>
-                      <Shield className="h-4 w-4 mr-1" />
-                      Remove Admin
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheck className="h-4 w-4 mr-1" />
-                      Make Admin
-                    </>
-                  )}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => startEdit(user)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete User</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete {user.email}? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => deleteUser(user.id, user.email)}>
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <Button
+                    variant={user.is_admin ? "destructive" : "default"}
+                    size="sm"
+                    onClick={() => toggleAdminStatus(user.id, user.email, user.is_admin || false)}
+                    disabled={processingUsers.has(user.id)}
+                    className="min-w-[120px]"
+                  >
+                    {processingUsers.has(user.id) ? (
+                      'Processing...'
+                    ) : user.is_admin ? (
+                      <>
+                        <Shield className="h-4 w-4 mr-1" />
+                        Remove Admin
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="h-4 w-4 mr-1" />
+                        Make Admin
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             ))
           )}
         </div>
 
         <div className="text-sm text-muted-foreground mt-4 p-3 bg-muted rounded-lg">
-          <p className="font-medium mb-1">Admin Management:</p>
-          <p>• Click "Make Admin" to grant admin privileges to a user</p>
-          <p>• Click "Remove Admin" to revoke admin privileges</p>
-          <p>• Changes take effect immediately</p>
+          <p className="font-medium mb-1">User Management:</p>
+          <p>• Create new users with email and password</p>
+          <p>• Edit user details using the edit button</p>
+          <p>• Delete users with the trash button (permanent action)</p>
+          <p>• Toggle admin privileges as needed</p>
         </div>
+
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit User</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="editEmail">Email</Label>
+                <Input
+                  id="editEmail"
+                  type="email"
+                  value={editUserForm.email}
+                  onChange={(e) => setEditUserForm({ ...editUserForm, email: e.target.value })}
+                  placeholder="user@example.com"
+                />
+              </div>
+              <div>
+                <Label htmlFor="editDisplayName">Display Name</Label>
+                <Input
+                  id="editDisplayName"
+                  value={editUserForm.displayName}
+                  onChange={(e) => setEditUserForm({ ...editUserForm, displayName: e.target.value })}
+                  placeholder="Enter display name"
+                />
+              </div>
+              <Button onClick={updateUser} className="w-full">
+                Update User
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
