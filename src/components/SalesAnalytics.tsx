@@ -46,6 +46,31 @@ const SalesAnalytics: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
+    
+    // Set up real-time order updates
+    const channel = supabase
+      .channel('orders-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'orders'
+        },
+        (payload) => {
+          console.log('New order received:', payload);
+          toast.success(`🛍️ New Order: ${payload.new.order_number}`, {
+            description: `From ${payload.new.customer_name} - Ksh ${payload.new.total.toLocaleString()}`,
+            duration: 10000,
+          });
+          fetchOrders(); // Refresh the orders list
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchOrders = async () => {
