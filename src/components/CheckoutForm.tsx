@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Truck, MapPin, Phone, Mail, CreditCard, CheckCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CartItem {
   id: number;
@@ -79,7 +80,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.customerName || !formData.email || !formData.phone || !formData.deliveryMethod || !formData.mpesaTransactionId) {
@@ -107,6 +108,17 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
       orderDate: new Date().toISOString(),
       status: 'pending'
     };
+
+    // Send order notification to Telegram
+    try {
+      await supabase.functions.invoke('send-order-to-telegram', {
+        body: orderData
+      });
+      console.log('Order notification sent to Telegram');
+    } catch (error) {
+      console.error('Failed to send Telegram notification:', error);
+      // Don't block the order process if Telegram fails
+    }
 
     onOrderSubmit(orderData);
 
