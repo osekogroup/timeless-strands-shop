@@ -320,7 +320,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
                         <div>
                           <h4 className="font-semibold">County Delivery</h4>
                           <p className="text-sm text-muted-foreground">
-                            7-14 business days
+                            5-14 business days
                           </p>
                         </div>
                         <span className="font-bold text-gold">
@@ -374,8 +374,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
                         <li>1. Go to M-Pesa on your phone</li>
                         <li>2. Select "Lipa na M-Pesa"</li>
                         <li>3. Select "Pay Bill"</li>
-                        <li>4. Business No: <strong>123456</strong></li>
-                        <li>5. Account: <strong>TIMELESS</strong></li>
+                        <li>4. Business No: <strong>522522</strong></li>
+                        <li>5. Account: <strong>1342330668</strong></li>
                         <li>6. Amount: <strong>Ksh {total.toLocaleString()}</strong></li>
                         <li>7. Enter your M-Pesa PIN and confirm</li>
                         <li>8. Copy the transaction ID below</li>

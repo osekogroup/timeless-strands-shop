@@ -290,7 +290,7 @@ const TrackOrder = () => {
                       <span>WhatsApp</span>
                     </a>
                     <a 
-                      href="mailto:support@timelessstrands.co.ke"
+                      href="mailto:timelessstrands@outlook.com"
                       className="flex items-center justify-center space-x-2 bg-gold text-ts-black px-6 py-3 rounded-lg hover:bg-gold-dark transition-colors"
                     >
                       <Mail className="w-5 h-5" />
@@ -316,7 +316,7 @@ const TrackOrder = () => {
                   <a href="tel:+254712345678" className="text-gold hover:text-gold-dark">
                     📞 +254 712 345 678
                   </a>
-                  <a href="mailto:support@timelessstrands.co.ke" className="text-gold hover:text-gold-dark">
+                  <a href="mailto:timelessstrands@outlook.com" className="text-gold hover:text-gold-dark">
                     ✉️ Email Support
                   </a>
                 </div>

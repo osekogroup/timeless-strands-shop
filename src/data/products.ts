@@ -80,7 +80,7 @@ export const products: Product[] = [
     variants: [
       { laceSize: "4x4 Closure", inchSize: "16 inches", price: 4500, stock: 8 },
     ],
-    rating: 4.9,
+    rating: 4.8,
     reviews: 234,
     category: "closure",
     hasVideo: false
@@ -96,7 +96,7 @@ export const products: Product[] = [
       { laceSize: "4x4 Closure", inchSize: "12 inches", price: 7400, stock: 3 },
       { laceSize: "4x4 Closure", inchSize: "14 inches", price: 8100, stock: 4 },
     ],
-    rating: 4.8,
+    rating: 4.9,
     reviews: 189,
     category: "closure",
     hasVideo: true,

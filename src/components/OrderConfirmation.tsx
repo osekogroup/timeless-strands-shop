@@ -127,7 +127,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData }) => {
                     ) : (
                       <p><strong>County:</strong> {orderData.county}</p>
                     )}
-                    <p><strong>Estimated Delivery:</strong> 7-14 business days</p>
+                    <p><strong>Estimated Delivery:</strong> 5-14 business days</p>
                   </div>
                 </div>
               </div>
@@ -204,7 +204,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData }) => {
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mt-0.5">4</div>
-                    <p>Expect delivery within 7-14 business days</p>
+                    <p>Expect delivery within 5-14 business days</p>
                   </div>
                 </div>
               </div>
@@ -221,11 +221,11 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData }) => {
                     <span>+254 768 174878</span>
                   </a>
                   <a 
-                    href="mailto:support@timelessstrands.co.ke"
+                    href="mailto:timelessstrands@outlook.com"
                     className="flex items-center space-x-2 text-gold hover:text-gold-dark"
                   >
                     <Mail className="w-5 h-5" />
-                    <span>support@timelessstrands.co.ke</span>
+                    <span>timelessstrands@outlook.com</span>
                   </a>
                 </div>
               </div>

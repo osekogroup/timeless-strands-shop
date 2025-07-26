@@ -351,7 +351,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             <div className="text-right">
               <div className="text-xs text-green-600">Free Returns</div>
-              <div className="text-xs text-muted-foreground">7-14 days</div>
+              <div className="text-xs text-muted-foreground">5-14 days</div>
             </div>
           </div>
         </div>

@@ -39,7 +39,7 @@ const HeroBanner = () => {
                 Wig Collection
               </h1>
               <p className="text-xl text-gray-300 max-w-lg">
-                Premium human hair wigs from Brazil, Peru & India. Transform your look with 
+                Premium human hair wigs from Brazil, Peru, Vietnam & India. Transform your look with 
                 our curated collection of luxury lace fronts, full lace, and closure wigs.
               </p>
             </div>
@@ -56,7 +56,7 @@ const HeroBanner = () => {
                 <div className="bg-gold w-10 h-10 rounded-full flex items-center justify-center">
                   <Truck className="w-5 h-5 text-ts-black" />
                 </div>
-                <span className="font-semibold">7-14 Days Delivery</span>
+                <span className="font-semibold">5-14 Days Delivery</span>
               </div>
               <div className="flex items-center space-x-3 text-white">
                 <div className="bg-gold w-10 h-10 rounded-full flex items-center justify-center">
@@ -109,7 +109,7 @@ const HeroBanner = () => {
                 </div>
                 <h3 className="text-xl font-bold text-white">Premium Quality</h3>
                 <p className="text-gray-300">
-                  Sourced directly from Brazil, Peru & India for the finest hair quality
+                  Sourced directly from Brazil, Peru, Vietnam & India for the finest hair quality
                 </p>
                 <div className="flex justify-center space-x-1">
                   {[...Array(5)].map((_, i) => (

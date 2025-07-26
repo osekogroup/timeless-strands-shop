@@ -9,7 +9,7 @@ const LiveChat: React.FC = () => {
   const commonQuestions = [
     {
       question: "What's the delivery time?",
-      answer: "Delivery takes 7-14 business days within Kenya. Express delivery is available for an additional fee."
+      answer: "Delivery takes 5-14 business days within Kenya. Express delivery is available for an additional fee."
     },
     {
       question: "Do you offer returns?",

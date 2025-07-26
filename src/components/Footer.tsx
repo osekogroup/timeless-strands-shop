@@ -25,15 +25,23 @@ const Footer = () => {
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               Your trusted source for premium human hair wigs in Kenya. We bring you the finest 
-              quality wigs from Brazil, Peru, and India with nationwide delivery.
+              quality wigs from Brazil, Peru, Vietnam, and India with nationwide delivery.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="bg-gold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gold-dark transition-colors">
+              <a href="https://www.facebook.com/TimelessStrands" className="bg-gold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gold-dark transition-colors">
                 <Facebook className="w-5 h-5 text-ts-black" />
               </a>
-              <a href="#" className="bg-gold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gold-dark transition-colors">
+              <a href="https://www.instagram.com/_timeless.strands" className="bg-gold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gold-dark transition-colors">
                 <Instagram className="w-5 h-5 text-ts-black" />
               </a>
+               <a 
+                 href="https://www.tiktok.com/@Timeless_Strands"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="bg-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+               >
+                 <span className="text-white text-lg font-bold">T</span>
+               </a>
                <a 
                  href="https://wa.me/254768174878?text=Hi! I'm interested in your wigs." 
                  target="_blank"
@@ -138,10 +146,10 @@ const Footer = () => {
                 <div>
                   <p className="text-gray-300 text-sm font-semibold">Email</p>
                    <a 
-                     href="mailto:estherzolabird@gmail.com" 
+                     href="mailto:timelessstrands@outlook.com" 
                      className="text-gray-400 text-sm hover:text-gold transition-colors"
                    >
-                     estherzolabird@gmail.com
+                     timelessstrands@outlook.com
                    </a>
                 </div>
               </div>
@@ -173,7 +181,7 @@ const Footer = () => {
               <div className="text-sm text-gray-400">Customer Rating</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-gold">7-14</div>
+              <div className="text-2xl font-bold text-gold">5-14</div>
               <div className="text-sm text-gray-400">Days Delivery</div>
             </div>
             <div>
