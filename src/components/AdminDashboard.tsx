@@ -734,13 +734,13 @@ const AdminDashboard: React.FC = () => {
         {filteredProducts.map((product) => (
           <div key={product.id} className="relative">
             <ProductCard
-              id={product.id}
+              id={Number(product.id)}
               name={product.name}
-              description={product.description}
-              images={product.images || []}
-              variants={product.variants || []}
-              rating={product.rating}
-              reviews={product.reviews}
+              description={product.description || ''}
+              images={[]}
+              variants={[]}
+              rating={product.rating || 0}
+              reviews={product.reviews || 0}
               originalPrice={undefined}
               hasVideo={product.has_video}
               videoLength={product.video_length}

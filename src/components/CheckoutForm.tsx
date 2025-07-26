@@ -191,7 +191,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
                     <form
                       onSubmit={async (e) => {
                         e.preventDefault();
-                        const phone = e.target.phone.value;
+                        const formData = new FormData(e.target as HTMLFormElement);
+                        const phone = formData.get('phone') as string;
                         if (!phone.match(/^07\d{8}$/)) {
                           alert('Enter a valid Safaricom number (07XXXXXXXX)');
                           return;
