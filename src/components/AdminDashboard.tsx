@@ -13,6 +13,9 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserManagement from './UserManagement';
 import ProductCard from './ProductCard';
+import SalesAnalytics from './SalesAnalytics';
+import SiteSettings from './SiteSettings';
+import CustomerSupport from './CustomerSupport';
 
 interface Product {
   id: string;
@@ -418,11 +421,19 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="products" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="products">Product Management</TabsTrigger>
-          <TabsTrigger value="users">User Management</TabsTrigger>
+      <Tabs defaultValue="dashboard" className="w-full">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="products">Products</TabsTrigger>
+          <TabsTrigger value="orders">Orders & Sales</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="support">Support</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-6">
+          <SalesAnalytics />
+        </TabsContent>
 
         <TabsContent value="products" className="space-y-6">
           <div className="flex justify-between items-center">
@@ -762,8 +773,20 @@ const AdminDashboard: React.FC = () => {
           )}
         </TabsContent>
 
+        <TabsContent value="orders">
+          <SalesAnalytics />
+        </TabsContent>
+
         <TabsContent value="users">
           <UserManagement />
+        </TabsContent>
+
+        <TabsContent value="settings">
+          <SiteSettings />
+        </TabsContent>
+
+        <TabsContent value="support">
+          <CustomerSupport />
         </TabsContent>
       </Tabs>
     </div>

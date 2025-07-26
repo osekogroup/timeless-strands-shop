@@ -56,6 +56,137 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_messages: {
+        Row: {
+          admin_response: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          message: string
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          admin_response?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          message: string
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          admin_response?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          message?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      order_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          order_id: string
+          status_from: string | null
+          status_to: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          order_id: string
+          status_from?: string | null
+          status_to: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          order_id?: string
+          status_from?: string | null
+          status_to?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          cart_items: Json
+          county: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_fee: number
+          delivery_method: string
+          id: string
+          mpesa_transaction_id: string
+          order_number: string
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          cart_items: Json
+          county?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_fee: number
+          delivery_method: string
+          id?: string
+          mpesa_transaction_id: string
+          order_number: string
+          status?: string
+          subtotal: number
+          total: number
+          updated_at?: string
+        }
+        Update: {
+          cart_items?: Json
+          county?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          delivery_fee?: number
+          delivery_method?: string
+          id?: string
+          mpesa_transaction_id?: string
+          order_number?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           created_at: string
@@ -192,6 +323,33 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
         }
         Relationships: []
       }

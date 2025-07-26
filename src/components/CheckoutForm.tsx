@@ -109,6 +109,32 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cartItems, onOrderSubmit })
       status: 'pending'
     };
 
+    // Save order to database
+    try {
+      const dbOrderData = {
+        order_number: orderData.orderNumber,
+        customer_name: orderData.customerName,
+        customer_email: orderData.email,
+        customer_phone: orderData.phone,
+        cart_items: orderData.cartItems as any,
+        delivery_method: orderData.deliveryMethod,
+        county: orderData.county,
+        subtotal: orderData.subtotal,
+        delivery_fee: orderData.deliveryFee,
+        total: orderData.total,
+        mpesa_transaction_id: orderData.mpesaTransactionId,
+        status: orderData.status
+      };
+      
+      await supabase
+        .from('orders')
+        .insert([dbOrderData]);
+      console.log('Order saved to database');
+    } catch (error) {
+      console.error('Failed to save order to database:', error);
+      // Don't block the order process if database save fails
+    }
+
     // Send order notification to Telegram
     try {
       await supabase.functions.invoke('send-order-to-telegram', {
