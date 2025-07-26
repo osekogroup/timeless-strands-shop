@@ -13,8 +13,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ user, cartItems, onAuthClick }) => {
   const { toast } = useToast();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (user) {
